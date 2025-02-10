@@ -1,0 +1,29 @@
+spring:
+  app:
+    password: password
+    auth:
+      service:
+        url: https://demo.rec.psg.dtechs.dev/rec-api/user
+
+  datasource:
+    url: jdbc:postgresql://localhost:25432/ntf
+    username: root
+    password: root
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+logging:
+  level:
+     org:
+       springframework:
+         web:
+           socket: trace

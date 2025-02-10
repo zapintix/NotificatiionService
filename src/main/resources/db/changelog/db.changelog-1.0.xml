@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Создание таблицы users -->
+    <changeSet id="1" author="root">
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="service_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Создание таблицы notifications -->
+    <changeSet id="2" author="root">
+        <createTable tableName="notifications">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="notification_group" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="link" type="VARCHAR(255)"/>
+            <column name="request_type" type="VARCHAR(255)"/>
+            <column name="request_url" type="VARCHAR(255)"/>
+            <column name="request_body" type="TEXT"/>
+            <column name="service_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <!-- Добавление поля notification_type -->
+            <column name="notification_type" type="VARCHAR(50)" defaultValue="PERSONAL">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Создание последовательности для users -->
+    <changeSet id="3-create-users-seq" author="root">
+        <createSequence sequenceName="users_seq"/>
+    </changeSet>
+
+    <!-- Создание таблицы user_notifications -->
+    <changeSet id="4" author="root">
+        <createTable tableName="user_notifications">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="notification_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="viewed" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_deleted" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Связь user_notifications.user_id -> users.id -->
+        <addForeignKeyConstraint
+                baseTableName="user_notifications"
+                baseColumnNames="user_id"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                constraintName="fk_user_notifications_users_user_id"/>
+
+        <!-- Связь user_notifications.notification_id -> notifications.id -->
+        <addForeignKeyConstraint
+                baseTableName="user_notifications"
+                baseColumnNames="notification_id"
+                referencedTableName="notifications"
+                referencedColumnNames="id"
+                constraintName="fk_user_notifications_notifications_id"/>
+    </changeSet>
+    <changeSet id="5" author="root">
+        <createTable tableName="updates">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_timeout" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
