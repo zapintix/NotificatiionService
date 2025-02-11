@@ -1,3 +1,4 @@
+let stompClient = null;
 async function getUserIdFromServer(jwtToken) {
     const response = await fetch('http://localhost:8080/api/auth/user', {
         method: 'GET',
@@ -20,6 +21,11 @@ document.getElementById('connectButton').onclick = async function () {
 
     if (!jwtToken) {
         alert('Пожалуйста, введите JWT токен.');
+        return;
+    }
+
+    if (stompClient && stompClient.connected) {
+        alert('Вы уже подключены!');
         return;
     }
 
